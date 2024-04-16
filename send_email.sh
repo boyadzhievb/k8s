@@ -1,0 +1,27 @@
+{
+  echo "From: no_reply@example.com"
+  echo "To: automation@example.com"
+  echo "Subject: K8s Cluster Certificate Auto-Renewed on $(hostname)"
+  echo "mime-version: 1.0"
+  echo "content-type: multipart/related; boundary=xBoundaryStringx"
+  echo ""
+  echo "--xBoundaryStringx"
+  echo "content-type: text/html"
+  echo ""
+  echo "<html>"
+  echo "<body>"
+  echo "<pre style=""font-family: monospace; font-size: 10pt"">"
+  echo "<b>When:</b> $(date)"
+  echo ""
+  echo "<b>Where:</b> K8s Master Node $(hostname) $(ip route get 1 | awk '{print $NF;exit}')"
+  echo ""
+  echo "<b>Summary:</b> K8s Cluster Certificate Auto-Renewed"
+  echo ""
+  echo "</pre>"
+  echo "</body>"
+  echo "</html>"
+  echo ""
+} | curl \
+    --url "smtp://192.168.0.1:25" \
+    --mail-from "no_reply@example.com" \
+    --mail-rcpt "automation@example.com"
